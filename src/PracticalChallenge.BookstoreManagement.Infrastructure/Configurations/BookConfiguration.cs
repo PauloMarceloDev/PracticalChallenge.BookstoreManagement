@@ -19,10 +19,25 @@ internal sealed class BookConfiguration : IEntityTypeConfiguration<Book>
         builder.OwnsOne(book => book.Price, priceBuilder => priceBuilder.Property(money => money.Currency)
             .HasConversion(currency => currency.Code, code => Currency.FromCode(code)));
 
-
         builder.Property(book => book.QuantityInStock)
             .HasConversion(quantityInStock => quantityInStock.Value, value => new QuantityInStock(value));
 
+        builder
+            .Property(e => e.Authors)
+            .HasConversion(
+                authors => string.Join(';', authors.OrderBy(a => a.Value).Select(author => author.Value)),
+                authorAsString => authorAsString
+                    .Split(';', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(author => new Author(author))
+                .ToList());
 
+        builder
+            .Property(e => e.Genres)
+            .HasConversion(
+                genres => string.Join(';', genres.OrderBy(genre => genre.Value).Select(genre => genre.Value)),
+                genreAsString => genreAsString
+                    .Split(';', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(genre => new Genre(genre))
+                    .ToList());
     }
 }

@@ -20,4 +20,8 @@
       <ProjectReference Include="..\PracticalChallenge.BookstoreManagement.Application\PracticalChallenge.BookstoreManagement.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Migrations\" />
+    </ItemGroup>
+
 </Project>

@@ -1,11 +1,12 @@
 using PracticalChallenge.BookstoreManagement.Application.Abstractions.Messaging;
 
-namespace PracticalChallenge.BookstoreManagement.Application.Books.AddBook;
+namespace PracticalChallenge.BookstoreManagement.Application.Books.UpdateBook;
 
-public sealed record AddBookCommand(
+public record UpdateBookCommand(
+    Guid BookId,
     string Title,
     IEnumerable<string> Authors,
     IEnumerable<string> Genres,
     string MoneyCurrency,
     decimal MoneyValue,
-    int QuantityInStock) : ICommand<Guid>;
+    int QuantityInStock) : ICommand;

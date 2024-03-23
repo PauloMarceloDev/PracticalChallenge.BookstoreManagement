@@ -67,11 +67,35 @@ public sealed class Book : Entity
         return book;
     }
 
-    public void Update(DateTime updatedOnUtc)
+    public static Result<Book> Update(
+        Book book,
+        Title title,
+        IEnumerable<Author> authors,
+        IEnumerable<Genre> genres,
+        Money price,
+        QuantityInStock quantityInStock,
+        DateTime updatedOnUtc)
     {
-        UpdatedOnUtc = updatedOnUtc;
-        
-        RaiseDomainEvent(new BookUpdatedDomainEvent(Id));
+        if (price.Amount <= 0)
+        {
+            return Result.Failure<Book>(BookErrors.InvalidPrice);
+        }
+
+        if (quantityInStock.Value <= 0)
+        {
+            return Result.Failure<Book>(BookErrors.InvalidQuantityInStock);
+        }
+
+        book.Title = title;
+        book.Authors = authors.ToList();
+        book.Genres = genres.ToList();
+        book.Price= price;
+        book.QuantityInStock= quantityInStock;
+        book.UpdatedOnUtc = updatedOnUtc;
+
+        book.RaiseDomainEvent(new BookUpdatedDomainEvent(book.Id));
+
+        return book;
     }
 
     public void Delete()

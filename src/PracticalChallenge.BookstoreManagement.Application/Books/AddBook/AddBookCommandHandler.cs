@@ -8,15 +8,15 @@ namespace PracticalChallenge.BookstoreManagement.Application.Books.AddBook;
 internal sealed class AddBookCommandHandler(
     IBookRepository bookRepository,
     IUnitOfWork unitOfWork,
-    IDateTimeProvider dateTimeProvider) : ICommandHandler<AddBookCommand>
+    IDateTimeProvider dateTimeProvider) : ICommandHandler<AddBookCommand, Guid>
 {
-    public async Task<Result> Handle(AddBookCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(AddBookCommand request, CancellationToken cancellationToken)
     {
         Book? book = await bookRepository.GetByTitleOrDefaultAsync(new Title(request.Title), cancellationToken);
 
         if (book is not null)
         {
-            return Result.Failure(BookErrors.TitleAlreadyExists);
+            return Result.Failure<Guid>(BookErrors.TitleAlreadyExists);
         }
 
         Result<Book> bookResult = Book.Create(
@@ -29,12 +29,12 @@ internal sealed class AddBookCommandHandler(
 
         if (bookResult.IsFailure)
         {
-            return Result.Failure(bookResult.Error);
+            return Result.Failure<Guid>(bookResult.Error);
         }
         
         bookRepository.Add(bookResult.Value);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success();
+        return Result.Success(bookResult.Value.Id);
     }
 }

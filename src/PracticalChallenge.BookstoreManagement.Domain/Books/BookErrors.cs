@@ -19,4 +19,8 @@ public static class BookErrors
     public static readonly Error TitleAlreadyExists = new(
         "Book.TitleAlreadyExists",
         "Book with the same title already exists");
+    
+    public static readonly Error NotFound = new(
+        "Book.NotFound",
+        "Book not found.");
 }

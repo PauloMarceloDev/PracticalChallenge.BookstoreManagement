@@ -21,4 +21,14 @@ internal abstract class Repository<T>(ApplicationDbContext dbContext)
     {
         DbContext.Add(entity);
     }
+
+    public virtual void Update(T entity)
+    {
+        DbContext.Update(entity);
+    }
+
+    public virtual void Delete(T entity)
+    {
+        DbContext.Remove(entity);
+    }
 }
