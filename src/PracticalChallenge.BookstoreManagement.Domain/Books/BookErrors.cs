@@ -15,4 +15,8 @@ public static class BookErrors
     public static readonly Error DifferentIds = new(
         "Book.DifferentIds",
         "Only book with the same id can be updated");
+    
+    public static readonly Error TitleAlreadyExists = new(
+        "Book.TitleAlreadyExists",
+        "Book with the same title already exists");
 }
